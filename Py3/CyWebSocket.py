@@ -143,7 +143,9 @@ class socketIO():
                         if "closed" in str(self.con):
                             return
                         try:
+                            print("In attesa dei dati...")
                             clientData = self.con.recv(1024).decode()
+                            print("Dati ricevuti:", clientData)
                             if clientData == '':
                                 return
                         except:
@@ -176,12 +178,15 @@ class socketIO():
                         if clientData == '':
                             return
                         dataList = clientData.split("\r\n")
+                        print("dataList:", dataList)
                         header = {}
                         
                         for data in dataList:
                             if ": " in data:
                                 unit = data.split(": ")
                                 header[unit[0]] = unit[1]
+                        print("Headers ricevuti:", header)
+
                         secKey = header['Sec-WebSocket-Key']
                         resKey = base64.b64encode(hashlib.new("sha1",(secKey+"258EAFA5-E914-47DA-95CA-C5AB0DC85B11").encode('utf-8')).digest())
                         resKey = resKey.decode()  # bytes object, back to str.
